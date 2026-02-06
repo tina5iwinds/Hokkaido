@@ -1,9 +1,10 @@
-const CACHE_NAME = 'tokyo-trip-v7';
+
+const CACHE_NAME = 'tokyo-trip-v8';
 const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-512.jpg'
+  '/Hokkaido/',
+  '/Hokkaido/index.html',
+  '/Hokkaido/manifest.json',
+  '/Hokkaido/icon-512.jpg'
 ];
 
 self.addEventListener('install', (event) => {
