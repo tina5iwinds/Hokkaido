@@ -1,11 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
-import { TabType, WeatherData } from './types';
-import { ItineraryView } from './components/ItineraryView';
-import { CostView } from './components/CostView';
-import { ListsView } from './components/ListsView';
-import { InfoView } from './components/InfoView';
-import { Icon } from './components/Shared';
-import { fetchTokyoWeather, getWeatherIcon } from './services/weatherService';
+import { TabType, WeatherData } from './types.ts';
+import { ItineraryView } from './components/ItineraryView.tsx';
+import { CostView } from './components/CostView.tsx';
+import { ListsView } from './components/ListsView.tsx';
+import { InfoView } from './components/InfoView.tsx';
+import { Icon } from './components/Shared.tsx';
+import { fetchTokyoWeather, getWeatherIcon } from './services/weatherService.ts';
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('itinerary');
