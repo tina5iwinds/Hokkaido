@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="https://lucide.dev/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>北海道冬之旅 2026</title>
+    
+    <!-- PWA Settings -->
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#2E3A53" />
+    
+    <!-- Mobile Web App Settings -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="北海道冬之旅" />
+    <link rel="apple-touch-icon" href="./icon-512.jpg" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      window.tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              tokyo: {
+                red: '#C93630',
+                paper: '#F2F4F7', // 稍微偏冷的白
+                ink: '#1E293B',   // 深藍墨色
+                gold: '#B45309',  // 溫暖琥珀金
+                matcha: '#4D7C0F',
+                sakura: '#BAE6FD', // 冰晶藍
+                gray: '#64748B',
+                indigo: '#1E1B4B',
+                anbao: '#3B82F6',  // 安寶藍
+                tingbao: '#F59E0B', // 婷寶橘
+              }
+            },
+            fontFamily: {
+              serif: ['"Noto Serif JP"', 'serif'],
+              sans: ['"Noto Sans JP"', '"Noto Sans TC"', 'sans-serif'],
+            },
+            boxShadow: {
+              'paper': '0 1px 2px rgba(0, 0, 0, 0.05)',
+              'float': '0 4px 0px rgba(0, 0, 0, 0.1)',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      html, body { height: 100%; width: 100%; overflow: hidden; position: fixed; background-color: #F2F4F7; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); overscroll-behavior: none; }
+      .rect-ui { border-radius: 0 !important; }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-tokyo-paper text-tokyo-ink overflow-hidden antialiased">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
