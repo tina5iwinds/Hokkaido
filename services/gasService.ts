@@ -1,0 +1,97 @@
+
+import { CostItem } from '../types.ts';
+import { cleanDateString } from './utils.ts';
+import { APP_CONFIG } from '../constants.ts';
+
+export const saveCostToGAS = async (item: CostItem, url: string, action: 'add' | 'edit' | 'delete' = 'add') => {
+  if (!url) return;
+  
+  const amountTwd = item.currency === 'TWD' ? item.amount : 0;
+  const amountJpy = item.currency === 'JPY' ? item.amount : 0;
+  
+  let xiangShare = 0;
+  let qianShare = 0;
+
+  if (item.splitType === 'average') {
+    xiangShare = item.amount / 2;
+    qianShare = item.amount / 2;
+  } else {
+    const manualAmt = item.manualAmount || 0;
+    if (item.manualSplitPerson === 'Anbao') {
+      xiangShare = manualAmt;
+      qianShare = item.amount - manualAmt;
+    } else {
+      qianShare = manualAmt;
+      xiangShare = item.amount - manualAmt;
+    }
+  }
+
+  const payload = {
+    action,
+    sheetName: APP_CONFIG.sheetName,
+    date: cleanDateString(item.date),
+    item: item.description,
+    payer: item.payer === 'Anbao' ? '安寶' : '慈寶',
+    amountTwd,
+    amountJpy,
+    splitXiangTwd: item.currency === 'TWD' ? xiangShare : 0,
+    splitXiangJpy: item.currency === 'JPY' ? xiangShare : 0,
+    splitQianTwd: item.currency === 'TWD' ? qianShare : 0,
+    splitQianJpy: item.currency === 'JPY' ? qianShare : 0,
+    note: item.notes || "",
+    rowIndex: item.id
+  };
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors', 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {
+    console.error("GAS API Error:", e);
+  }
+};
+
+export const fetchCostsFromGAS = async (url: string): Promise<CostItem[] | null> => {
+  if (!url) return null;
+  try {
+    const params = new URLSearchParams({
+      sheetName: APP_CONFIG.sheetName,
+      _t: Date.now().toString()
+    });
+    
+    const response = await fetch(`${url}?${params.toString()}`);
+    const result = await response.json();
+    
+    if (result && result.status === 'success' && Array.isArray(result.data)) {
+        return result.data.map((row: any) => {
+            const jpyVal = Number(row.jpy || 0);
+            const twdVal = Number(row.twd || 0);
+            const isJPY = jpyVal > 0;
+            const total = isJPY ? jpyVal : twdVal;
+            
+            const cloudXiangShare = isJPY ? Number(row.splitXiangJpy || 0) : Number(row.splitXiangTwd || 0);
+            const isAverage = Math.abs(cloudXiangShare - (total / 2)) < 0.1;
+
+            return {
+                id: String(row.rowIndex),
+                date: cleanDateString(String(row.date || "")),
+                description: String(row.item || ""),
+                payer: (row.payer === '慈寶' || row.payer === 'Cibao' || row.payer === '婷寶' || row.payer === 'Tingbao') ? 'Cibao' : 'Anbao',
+                amount: total,
+                currency: isJPY ? 'JPY' : 'TWD',
+                splitType: isAverage ? 'average' : 'manual',
+                manualSplitPerson: isAverage ? undefined : 'Anbao',
+                manualAmount: isAverage ? undefined : cloudXiangShare,
+                notes: String(row.note || ""),
+            };
+        });
+    }
+    return [];
+  } catch (e) {
+    console.error("GAS Fetch Error:", e);
+    return null; 
+  }
+};

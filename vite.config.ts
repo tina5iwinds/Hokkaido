@@ -6,8 +6,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   // 必須與您的 GitHub 倉庫名稱完全一致
-  // 例如：https://<username>.github.io/Tokyo-Trip-2026/
-  base: '/Tokyo-Trip-2026/',
+  // 因為您的倉庫名稱是 Hokkaido，所以這裡改為 /Hokkaido/
+  base: '/Hokkaido/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
